@@ -5,6 +5,12 @@
 #include "SFML/Graphics.hpp"
 
 namespace wilson {
+
+    typedef struct {
+        const char* name;
+        std::shared_ptr<sf::Texture> texture;
+    } TextureHandle;
+
     class Resources {
     public:
         Resources();
@@ -13,7 +19,7 @@ namespace wilson {
         std::shared_ptr<sf::Texture> load_texture(const char* path);
 
     private:
-        std::vector<std::shared_ptr<sf::Texture>> m_textures;
+        std::vector<TextureHandle> m_texture_handles;
     };
 
     static Resources* current = nullptr;

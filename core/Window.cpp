@@ -22,13 +22,15 @@ namespace wilson {
         for(auto& entity : m_entities) {
             for(auto& component : entity->components) {
                 auto drawable_component = std::dynamic_pointer_cast<WilsonWrapper>(component);
-                auto drawable = drawable_component->get_drawable();
-                auto transformable = drawable_component->get_transform();
+                if(drawable_component != nullptr) {
+                    auto drawable = drawable_component->get_drawable();
+                    auto transformable = drawable_component->get_transform();
 
-                transformable->setPosition(entity->transform.position);
-                transformable->setScale(entity->transform.scale);
-                transformable->setRotation(entity->transform.rotation);
-                m_window->draw(*drawable);
+                    transformable->setPosition(entity->transform.position);
+                    transformable->setScale(entity->transform.scale);
+                    transformable->setRotation(entity->transform.rotation);
+                    m_window->draw(*drawable);
+                }
             }
         }
         m_window->display();

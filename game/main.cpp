@@ -1,7 +1,4 @@
-#include "Entity.h"
-#include "SpriteComponent.h"
-#include "Window.h"
-#include "Resources.h"
+#include "../core/wilson.h"
 
 using namespace wilson;
 

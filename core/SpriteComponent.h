@@ -9,7 +9,7 @@ namespace wilson {
     class SpriteComponent : public Component, public WilsonWrapper {
     public:
         void start() override {};
-        void update() override {};
+        void update(float delta_time) override {};
         void set_texture(std::shared_ptr<sf::Texture>& texture);
         sf::Drawable* get_drawable() override;
         sf::Transformable* get_transform() override;

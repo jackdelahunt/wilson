@@ -5,8 +5,8 @@ AnimatedSpriteComponent::AnimatedSpriteComponent() {
     m_sprites = std::vector<sf::Sprite>();
 }
 
-void AnimatedSpriteComponent::update() {
-    m_current_interval -= 0.01f;
+void AnimatedSpriteComponent::update(float delta_time) {
+    m_current_interval -= delta_time;
 
     if(m_current_interval <= 0.0f) {
         m_current_interval = m_interval;

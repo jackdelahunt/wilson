@@ -8,13 +8,14 @@
 namespace wilson {
     class Entity {
     public:
+        bool enabled = true;
         static std::shared_ptr<Entity> New();
 
         Transform transform;
         std::vector<std::shared_ptr<Component>> components;
 
         Entity();
-        void update();
+        void update(float delta_time);
         void start();
 
         template<typename T>

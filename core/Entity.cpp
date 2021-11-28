@@ -16,9 +16,10 @@ namespace wilson {
         }
     }
 
-    void Entity::update() {
+    void Entity::update(float delta_time) {
         for (auto& c: components) {
-            c->update();
+            if(c->active)
+                c->update(delta_time);
         }
     }
 }

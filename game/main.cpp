@@ -16,14 +16,9 @@ int main()
     anim_sprite->append_texture(texture_red);
     anim_sprite->append_texture(texture_green);
     anim_sprite->append_texture(texture_blue);
-    anim_sprite->set_interval(100.0f);
+    anim_sprite->set_interval(0.5f);
 
     auto window = Window();
     window.add_entity(e);
-    while (window.is_open()) {
-        window.poll_events();
-        window.update();
-        e->transform.rotation += 0.01f;
-        window.draw();
-    }
+    window.start();
 }

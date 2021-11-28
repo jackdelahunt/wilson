@@ -8,6 +8,17 @@ namespace wilson {
         m_window = std::make_unique<sf::RenderWindow>(m_video_mode, "wilson");
     }
 
+    void Window::start() {
+        sf::Clock delta_clock;
+        float delta_time = 0.0f;
+        while (m_window->isOpen()) {
+            poll_events();
+            update(delta_time);
+            draw();
+            delta_time = delta_clock.restart().asSeconds();
+        }
+    }
+
     void Window::poll_events() {
         sf::Event event;
         while (m_window->pollEvent(event))
@@ -20,6 +31,8 @@ namespace wilson {
     void Window::draw() {
         m_window->clear();
         for(auto& entity : m_entities) {
+            if(!entity->enabled) continue;
+
             for(auto& component : entity->components) {
                 auto drawable_component = std::dynamic_pointer_cast<WilsonWrapper>(component);
                 if(drawable_component != nullptr) {
@@ -36,9 +49,10 @@ namespace wilson {
         m_window->display();
     }
 
-    void Window::update() {
+    void Window::update(float delta_time) {
         for(auto& entity : m_entities) {
-            entity->update();
+            if(entity->enabled)
+                entity->update(delta_time);
         }
     }
 

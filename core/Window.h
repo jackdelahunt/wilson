@@ -13,9 +13,10 @@ namespace wilson {
     class Window {
     public:
         Window();
+        void start();
         void poll_events();
         void draw();
-        void update();
+        void update(float delta_time);
         void add_entity(const std::shared_ptr<Entity>& entity);
 
         bool is_open() const { return m_window->isOpen(); }

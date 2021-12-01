@@ -8,7 +8,7 @@ class TilemapComponent : public Component, public sf::Drawable, sf::Transformabl
         TilemapComponent();
 
         void start() override {};
-        void update(float delta_time) override {};
+        void update(float delta_time, std::vector<sf::Event>& events) override {};
 
         sf::Drawable* get_drawable() override {
             return this;
@@ -21,6 +21,9 @@ class TilemapComponent : public Component, public sf::Drawable, sf::Transformabl
         void reload();
         void set_tileset(const char* path);
         void set_tile(size_t x, size_t y, int value);
+        int get_tile(size_t x, size_t y, int value);
+        sf::Vector2f get_world_position(int x, int y);
+        sf::Vector2i get_tile_position(sf::Vector2f& world_position);
 
         void set_tile_dimensions(size_t width, size_t height) {
             m_tile_width = width;

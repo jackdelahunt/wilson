@@ -2,6 +2,7 @@
 
 namespace wilson {
     Entity::Entity() {
+        name = "";
         transform = Transform();
         components = std::vector < std::shared_ptr < Component >> ();
     }
@@ -16,10 +17,10 @@ namespace wilson {
         }
     }
 
-    void Entity::update(float delta_time) {
+    void Entity::update(float delta_time, std::vector<sf::Event>& events) {
         for (auto& c: components) {
             if(c->active)
-                c->update(delta_time);
+                c->update(delta_time, events);
         }
     }
 }

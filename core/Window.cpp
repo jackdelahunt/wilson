@@ -17,20 +17,25 @@ namespace wilson {
         sf::Clock delta_clock;
         float delta_time = 0.0f;
         while (m_window->isOpen()) {
-            poll_events();
-            update(delta_time);
+            auto events = poll_events();
+            update(delta_time, events);
             draw();
             delta_time = delta_clock.restart().asSeconds();
         }
     }
 
-    void Window::poll_events() {
+    std::vector<sf::Event> Window::poll_events() {
+        auto events = std::vector<sf::Event>();
         sf::Event event;
         while (m_window->pollEvent(event))
         {
             if (event.type == sf::Event::Closed)
                 m_window->close();
+
+            events.push_back(event);
         }
+
+        return events;
     }
 
     void Window::draw() {
@@ -39,10 +44,10 @@ namespace wilson {
             if(!entity->enabled) continue;
 
             for(auto& component : entity->components) {
-                auto drawable_component = std::dynamic_pointer_cast<WilsonWrapper>(component);
-                if(drawable_component != nullptr) {
-                    auto drawable = drawable_component->get_drawable();
-                    auto transformable = drawable_component->get_transform();
+                auto wilson_wrapper = std::dynamic_pointer_cast<WilsonWrapper>(component);
+                if(wilson_wrapper != nullptr) {
+                    auto drawable = wilson_wrapper->get_drawable();
+                    auto transformable = wilson_wrapper->get_transform();
                     if(transformable != nullptr) {
                         transformable->setPosition(entity->transform.position);
                         transformable->setScale(entity->transform.scale);
@@ -56,15 +61,24 @@ namespace wilson {
         m_window->display();
     }
 
-    void Window::update(float delta_time) {
+    void Window::update(float delta_time, std::vector<sf::Event>& events) {
         for(auto& entity : m_entities) {
             if(entity->enabled)
-                entity->update(delta_time);
+                entity->update(delta_time, events);
         }
     }
 
     void Window::add_entity(const std::shared_ptr<Entity>& entity) {
+        entity->window = this;
         m_entities.push_back(entity);
     }
 
+    std::shared_ptr<Entity> Window::get_entity_with_name(const char* name) {
+        for(auto& entity : m_entities) {
+            if(entity->name == name)
+                return entity;
+        }
+
+        return nullptr;
+    }
 }

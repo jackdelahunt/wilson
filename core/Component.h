@@ -1,5 +1,6 @@
 #pragma once
 #include "Entity.h"
+#include "SFML/Graphics.hpp"
 
 namespace wilson {
     class Entity;
@@ -10,6 +11,6 @@ namespace wilson {
         Entity* entity = nullptr;
 
         virtual void start() = 0;
-        virtual void update(float delta_time) = 0;
+        virtual void update(float delta_time, std::vector<sf::Event>& events) = 0;
     };
 }

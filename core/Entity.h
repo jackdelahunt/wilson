@@ -4,19 +4,24 @@
 #include "Component.h"
 #include <memory>
 #include "Transform.h"
+#include "Window.h"
 
 namespace wilson {
     class Component;
+    class Window;
+
     class Entity {
     public:
-        bool enabled = true;
         static std::shared_ptr<Entity> New();
 
+        bool enabled = true;
+        std::string name;
         Transform transform;
         std::vector<std::shared_ptr<Component>> components;
+        Window* window;
 
         Entity();
-        void update(float delta_time);
+        void update(float delta_time, std::vector<sf::Event>& events);
         void start();
         template<typename T>
         std::shared_ptr<T> add_component() {
@@ -27,6 +32,8 @@ namespace wilson {
                 comp->entity = this;
                 return generic_ptr;
             }
+
+            return nullptr;
         }
 
         template <typename T>

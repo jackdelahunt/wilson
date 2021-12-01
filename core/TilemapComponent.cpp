@@ -16,6 +16,7 @@ namespace wilson {
         m_vertices.setPrimitiveType(sf::Quads);
         m_vertices.resize(m_width * m_height * 4);
         m_tiles = std::vector<int>(m_width * m_height);
+        rebuild();
     }
 
     void TilemapComponent::rebuild() {
@@ -54,4 +55,20 @@ namespace wilson {
         m_tiles.at(x + m_width *y) = value;
         rebuild();
     }
+
+    int TilemapComponent::get_tile(size_t x, size_t y, int value) {
+        return m_tiles.at(x + m_width *y);
+    }
+
+    sf::Vector2f TilemapComponent::get_world_position(int x, int y) {
+        auto tilemap_position = entity->transform.position;
+        return sf::Vector2f(tilemap_position.x + (x * m_tile_width) + m_tile_width / 2, tilemap_position.y + (y * m_tile_height) + m_tile_height / 2);
+    }
+
+    sf::Vector2i TilemapComponent::get_tile_position(sf::Vector2f& world_position) {
+        int tile_index_x = world_position.x / m_tile_width;
+        int tile_index_y = world_position.y / m_tile_height;
+        return sf::Vector2i(tile_index_x, tile_index_y);
+    }
+
 }

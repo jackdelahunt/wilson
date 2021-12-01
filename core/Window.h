@@ -4,6 +4,9 @@
 #include "Entity.h"
 
 namespace wilson {
+
+     class Entity;
+
     class WilsonWrapper {
     public:
         virtual sf::Drawable* get_drawable() = 0;
@@ -14,10 +17,11 @@ namespace wilson {
     public:
         Window();
         void start();
-        void poll_events();
+        std::vector<sf::Event> poll_events();
         void draw();
-        void update(float delta_time);
+        void update(float delta_time, std::vector<sf::Event>& events);
         void add_entity(const std::shared_ptr<Entity>& entity);
+        std::shared_ptr<Entity> get_entity_with_name(const char* name);
 
         bool is_open() const { return m_window->isOpen(); }
 

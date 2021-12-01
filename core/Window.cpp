@@ -9,6 +9,11 @@ namespace wilson {
     }
 
     void Window::start() {
+
+        for(auto& entity : m_entities) {
+            entity->start();
+        }
+
         sf::Clock delta_clock;
         float delta_time = 0.0f;
         while (m_window->isOpen()) {
@@ -38,10 +43,12 @@ namespace wilson {
                 if(drawable_component != nullptr) {
                     auto drawable = drawable_component->get_drawable();
                     auto transformable = drawable_component->get_transform();
+                    if(transformable != nullptr) {
+                        transformable->setPosition(entity->transform.position);
+                        transformable->setScale(entity->transform.scale);
+                        transformable->setRotation(entity->transform.rotation);
+                    }
 
-                    transformable->setPosition(entity->transform.position);
-                    transformable->setScale(entity->transform.scale);
-                    transformable->setRotation(entity->transform.rotation);
                     m_window->draw(*drawable);
                 }
             }

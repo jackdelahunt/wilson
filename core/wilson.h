@@ -7,3 +7,4 @@
 #include "Transform.h"
 #include "Window.h"
 #include "AnimatedSpriteComponent.h"
+#include "TilemapComponent.h"

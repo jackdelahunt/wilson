@@ -1,4 +1,5 @@
 #include "../core/wilson.h"
+#include "BouncyComponent.h"
 
 using namespace wilson;
 
@@ -6,17 +7,15 @@ int main()
 {
     auto e = Entity::New();
     e->transform.position = sf::Vector2f(100.0f, 30.0f);
-    e->transform.scale = sf::Vector2f(0.3f, 0.3f);
+    e->transform.scale = sf::Vector2f(1.0f, 1.0f);
 
-    auto texture_red = Resources::Current()->load_texture("resources/red.jpg");
-    auto texture_green = Resources::Current()->load_texture("resources/green.jpeg");
-    auto texture_blue = Resources::Current()->load_texture("resources/blue.png");
-
-    auto anim_sprite = e->add_component<AnimatedSpriteComponent>();
-    anim_sprite->append_texture(texture_red);
-    anim_sprite->append_texture(texture_green);
-    anim_sprite->append_texture(texture_blue);
-    anim_sprite->set_interval(0.5f);
+    e->add_component<BouncyComponent>();
+    auto tilemap = e->add_component<TilemapComponent>();
+    tilemap->set_dimensions(5, 5);
+    tilemap->set_tile_dimensions(32, 32);
+    tilemap->set_tileset("/home/jackdelahunt/Projects/wilson/resources/tileset.png");
+    tilemap->reload();
+    tilemap->set_tile(3, 2, 4);
 
     auto window = Window();
     window.add_entity(e);

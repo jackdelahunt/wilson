@@ -6,6 +6,7 @@
 #include "Transform.h"
 
 namespace wilson {
+    class Component;
     class Entity {
     public:
         bool enabled = true;
@@ -17,12 +18,15 @@ namespace wilson {
         Entity();
         void update(float delta_time);
         void start();
-
         template<typename T>
         std::shared_ptr<T> add_component() {
-            auto comp = std::make_shared<T>();
-            components.push_back(comp);
-            return comp;
+            auto generic_ptr = std::make_shared<T>();
+            auto comp = std::static_pointer_cast<Component>(generic_ptr);
+            if(comp != nullptr) {
+                components.push_back(comp);
+                comp->entity = this;
+                return generic_ptr;
+            }
         }
 
         template <typename T>

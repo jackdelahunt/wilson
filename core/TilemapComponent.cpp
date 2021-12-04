@@ -51,7 +51,7 @@ namespace wilson {
         m_tileset.loadFromFile(path);
     }
 
-    void TilemapComponent::set_tile(size_t x, size_t y, int value) {
+    void TilemapComponent::set_tile(int x, int y, int value) {
         m_tiles.at(x + m_width *y) = value;
         rebuild();
     }
@@ -62,7 +62,11 @@ namespace wilson {
 
     sf::Vector2f TilemapComponent::get_world_position(int x, int y) {
         auto tilemap_position = entity->transform.position;
-        return sf::Vector2f(tilemap_position.x + (x * m_tile_width) + m_tile_width / 2, tilemap_position.y + (y * m_tile_height) + m_tile_height / 2);
+        auto x_f = static_cast<float>(x);
+        auto y_f = static_cast<float>(y);
+        auto width_f = static_cast<float>(m_tile_width);
+        auto height_f = static_cast<float>(m_tile_height);
+        return sf::Vector2f(tilemap_position.x + (x_f * height_f) + width_f / 2, tilemap_position.y + (y_f * height_f) + height_f / 2);
     }
 
     sf::Vector2i TilemapComponent::get_tile_position(sf::Vector2f& world_position) {

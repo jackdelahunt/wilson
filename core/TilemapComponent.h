@@ -20,7 +20,7 @@ class TilemapComponent : public Component, public sf::Drawable, sf::Transformabl
 
         void reload();
         void set_tileset(const char* path);
-        void set_tile(size_t x, size_t y, int value);
+        void set_tile(int x, int y, int value);
         int get_tile(size_t x, size_t y, int value);
         sf::Vector2f get_world_position(int x, int y);
         sf::Vector2i get_tile_position(sf::Vector2f& world_position);

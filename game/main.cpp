@@ -10,8 +10,8 @@ int main()
 
     // --------------------------
     //          TEXTURES
-    auto red_texture = Resources::Current()->load_texture("/home/jackdelahunt/Projects/wilson/resources/red.jpg");
-    auto blue_texture = Resources::Current()->load_texture("/home/jackdelahunt/Projects/wilson/resources/blue.png");
+    auto red_texture = Resources::Current()->load_texture("./resources/red.jpg");
+    auto blue_texture = Resources::Current()->load_texture("./resources/blue.png");
 
     // --------------------------
 
@@ -23,10 +23,14 @@ int main()
     tilemap_entity->transform.scale = sf::Vector2f(1.0f, 1.0f);
 
     auto tilemap = tilemap_entity->add_component<TilemapComponent>();
-    tilemap->set_dimensions(10, 7);
-    tilemap->set_tile_dimensions(32, 32);
-    tilemap->set_tileset("/home/jackdelahunt/Projects/wilson/resources/tileset.png");
-    tilemap->reload();
+    if(!tilemap->load_from_disk("tilemap.json")) {
+        tilemap->set_dimensions(25, 20);
+        tilemap->set_tile_dimensions(32, 32);
+        tilemap->set_tileset("./resources/tileset.png");
+        tilemap->reload();
+    } else {
+        tilemap->rebuild();
+    }
 
     // --------------------------
     //          PLAYER

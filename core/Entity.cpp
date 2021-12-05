@@ -23,5 +23,11 @@ namespace wilson {
                 c->update(delta_time, events);
         }
     }
+
+    void Entity::Destroy() {
+        for(auto& component : components) {
+            component->Destroy();
+        }
+    }
 }
 

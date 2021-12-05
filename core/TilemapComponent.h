@@ -9,12 +9,13 @@ namespace wilson {
 class TilemapComponent : public Component, public sf::Drawable, sf::Transformable, public WilsonWrapper{
     public:
         TilemapComponent();
-        TilemapComponent(std::vector<int> tiles, size_t tile_width, size_t tile_height, size_t width, size_t height, std::string tileset_path);
 
         void start() override {};
         void update(float delta_time, std::vector<sf::Event>& events) override {};
+        void Destroy() override;
+        bool load_from_disk(std::string name);
         json to_json();
-        TilemapComponent from_json(json& j);
+        void from_json(json& j);
 
         sf::Drawable* get_drawable() override {
             return this;
@@ -25,9 +26,10 @@ class TilemapComponent : public Component, public sf::Drawable, sf::Transformabl
         };
 
         void reload();
+        void rebuild();
         void set_tileset(const char* path);
         void set_tile(int x, int y, int value);
-        int get_tile(size_t x, size_t y, int value);
+        int get_tile(size_t x, size_t y);
         sf::Vector2f get_world_position(int x, int y);
         sf::Vector2i get_tile_position(sf::Vector2f& world_position);
 
@@ -51,7 +53,6 @@ class TilemapComponent : public Component, public sf::Drawable, sf::Transformabl
         std::string m_tileset_path;
         sf::Texture m_tileset;
 
-        void rebuild();
         virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const
         {
             states.transform *= this->getTransform();

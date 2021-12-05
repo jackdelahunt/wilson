@@ -20,6 +20,7 @@ namespace wilson {
         std::vector<sf::Event> poll_events();
         void draw();
         void update(float delta_time, std::vector<sf::Event>& events);
+        void end();
         void add_entity(const std::shared_ptr<Entity>& entity);
         std::shared_ptr<Entity> get_entity_with_name(const char* name);
 

@@ -1,4 +1,6 @@
 #include "TilemapComponent.h"
+#include "Resources.h"
+#include <iostream>
 
 namespace wilson {
     TilemapComponent::TilemapComponent() {
@@ -12,19 +14,23 @@ namespace wilson {
         m_vertices.resize(m_width * m_height * 4);
     }
 
-    TilemapComponent::TilemapComponent(std::vector<int> tiles, size_t tile_width, size_t tile_height, size_t width, size_t height, std::string tileset_path) {
-        m_tiles = tiles;
-        m_tile_width = tile_width;
-        m_tile_height = tile_height;
-        m_width = width;
-        m_height = height;
-        m_tileset_path = tileset_path;
+    void TilemapComponent::Destroy() {
+        auto json = to_json();
+        Resources::Current()->save("tilemap.json", json);
+    };
 
-        m_vertices.setPrimitiveType(sf::Quads);
-        m_vertices.resize(m_width * m_height * 4);
-        m_tileset.loadFromFile(m_tileset_path);
+    bool TilemapComponent::load_from_disk(std::string name) {
+        auto data = Resources::Current()->try_load(name);
+        if(data.has_value()){
+            from_json(data.value());
+            set_tileset(m_tileset_path.c_str());
+            m_vertices.setPrimitiveType(sf::Quads);
+            m_vertices.resize(m_width * m_height * 4);
+            return true;
+        }
+
+        return false;
     }
-
 
     json TilemapComponent::to_json() {
         json j;
@@ -37,16 +43,13 @@ namespace wilson {
         return j;
     }
 
-    TilemapComponent TilemapComponent::from_json(json& j) {
-        TilemapComponent from;
-        j.at("tiles").get_to(from.m_tiles);
-        j.at("tile_width").get_to(from.m_tile_width);
-        j.at("tile_height").get_to(from.m_tile_height);
-        j.at("width").get_to(from.m_width);
-        j.at("height").get_to(from.m_height);
-        j.at("tileset_path").get_to(from.m_tileset_path);
-
-        return from;
+    void TilemapComponent::from_json(json& j) {
+        j.at("tiles").get_to(this->m_tiles);
+        j.at("tile_width").get_to(this->m_tile_width);
+        j.at("tile_height").get_to(this->m_tile_height);
+        j.at("width").get_to(this->m_width);
+        j.at("height").get_to(this->m_height);
+        j.at("tileset_path").get_to(this->m_tileset_path);
     }
 
     void TilemapComponent::reload() {
@@ -85,6 +88,7 @@ namespace wilson {
     }
 
     void TilemapComponent::set_tileset(const char* path) {
+        m_tileset_path = path;
         m_tileset.loadFromFile(path);
     }
 
@@ -93,7 +97,7 @@ namespace wilson {
         rebuild();
     }
 
-    int TilemapComponent::get_tile(size_t x, size_t y, int value) {
+    int TilemapComponent::get_tile(size_t x, size_t y) {
         return m_tiles.at(x + m_width *y);
     }
 

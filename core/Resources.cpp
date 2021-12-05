@@ -1,5 +1,8 @@
 #include "Resources.h"
+#include <filesystem>
+#include <fstream>
 
+using json = nlohmann::json;
 namespace wilson {
 
     Resources::Resources() {
@@ -23,6 +26,31 @@ namespace wilson {
         texture->loadFromFile(path);
         m_texture_handles.push_back((TextureHandle) {.name = path, .texture = texture});
         return texture;
+    }
+
+    void Resources::build_save_path() {
+        std::filesystem::create_directory("data");
+    }
+
+    void Resources::save(std::string name, json& json) {
+        build_save_path();
+        std::ofstream out;
+        out.open("data/" + name);
+        out << json;
+        out.close();
+    }
+
+    std::optional<json> Resources::try_load(std::string name) {
+        build_save_path();
+        if(std::filesystem::exists("data/" + name)) {
+            json json;
+            std::ifstream in;
+            in.open("data/" + name);
+            in >> json;
+            in.close();
+            return json;
+        }
+        return std::optional<json> {};
     }
 
 }

@@ -4,7 +4,7 @@
 
 namespace wilson {
     Window::Window() {
-        m_video_mode = sf::VideoMode(800, 600);
+        m_video_mode = sf::VideoMode(800, 640);
         m_window = std::make_unique<sf::RenderWindow>(m_video_mode, "wilson");
     }
 
@@ -21,6 +21,13 @@ namespace wilson {
             update(delta_time, events);
             draw();
             delta_time = delta_clock.restart().asSeconds();
+        }
+        end();
+    }
+
+    void Window::end() {
+        for(auto& entity : m_entities) {
+            entity->Destroy();
         }
     }
 

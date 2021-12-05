@@ -13,7 +13,6 @@ namespace wilson {
     class Entity {
     public:
         static std::shared_ptr<Entity> New();
-
         bool enabled = true;
         std::string name;
         Transform transform;
@@ -23,6 +22,7 @@ namespace wilson {
         Entity();
         void update(float delta_time, std::vector<sf::Event>& events);
         void start();
+        void Destroy();
         template<typename T>
         std::shared_ptr<T> add_component() {
             auto generic_ptr = std::make_shared<T>();

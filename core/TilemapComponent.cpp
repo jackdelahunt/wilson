@@ -12,6 +12,43 @@ namespace wilson {
         m_vertices.resize(m_width * m_height * 4);
     }
 
+    TilemapComponent::TilemapComponent(std::vector<int> tiles, size_t tile_width, size_t tile_height, size_t width, size_t height, std::string tileset_path) {
+        m_tiles = tiles;
+        m_tile_width = tile_width;
+        m_tile_height = tile_height;
+        m_width = width;
+        m_height = height;
+        m_tileset_path = tileset_path;
+
+        m_vertices.setPrimitiveType(sf::Quads);
+        m_vertices.resize(m_width * m_height * 4);
+        m_tileset.loadFromFile(m_tileset_path);
+    }
+
+
+    json TilemapComponent::to_json() {
+        json j;
+        j["tiles"] = m_tiles;
+        j["tile_width"] = m_tile_width;
+        j["tile_height"] = m_tile_height;
+        j["width"] = m_width;
+        j["height"] = m_height;
+        j["tileset_path"] = m_tileset_path;
+        return j;
+    }
+
+    TilemapComponent TilemapComponent::from_json(json& j) {
+        TilemapComponent from;
+        j.at("tiles").get_to(from.m_tiles);
+        j.at("tile_width").get_to(from.m_tile_width);
+        j.at("tile_height").get_to(from.m_tile_height);
+        j.at("width").get_to(from.m_width);
+        j.at("height").get_to(from.m_height);
+        j.at("tileset_path").get_to(from.m_tileset_path);
+
+        return from;
+    }
+
     void TilemapComponent::reload() {
         m_vertices.setPrimitiveType(sf::Quads);
         m_vertices.resize(m_width * m_height * 4);

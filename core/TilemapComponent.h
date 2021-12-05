@@ -1,14 +1,20 @@
 #pragma once
 #include "Component.h"
 #include "Window.h"
+#include "json.hpp"
+
+using json = nlohmann::json;
 
 namespace wilson {
-class TilemapComponent : public Component, public sf::Drawable, sf::Transformable, public WilsonWrapper {
+class TilemapComponent : public Component, public sf::Drawable, sf::Transformable, public WilsonWrapper{
     public:
         TilemapComponent();
+        TilemapComponent(std::vector<int> tiles, size_t tile_width, size_t tile_height, size_t width, size_t height, std::string tileset_path);
 
         void start() override {};
         void update(float delta_time, std::vector<sf::Event>& events) override {};
+        json to_json();
+        TilemapComponent from_json(json& j);
 
         sf::Drawable* get_drawable() override {
             return this;
@@ -42,6 +48,7 @@ class TilemapComponent : public Component, public sf::Drawable, sf::Transformabl
         size_t m_width;
         size_t m_height;
         sf::VertexArray m_vertices;
+        std::string m_tileset_path;
         sf::Texture m_tileset;
 
         void rebuild();

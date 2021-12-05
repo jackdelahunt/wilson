@@ -21,8 +21,6 @@ void PlayerComponent::update(float delta_time, std::vector<sf::Event>& events) {
                 auto newPosition = m_tilemap->get_world_position(++m_x, m_y);
                 entity->transform.position = (sf::Vector2f) newPosition;
             }
-
-            m_tilemap->set_tile(m_x, m_y, 3);
         }
     }
 }
